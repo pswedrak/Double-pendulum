@@ -60,16 +60,19 @@ class App(QMainWindow):
         self.left = 300
         self.top = 300
         self.width = 425
-        self.height = 400
-        self.textbox1 = QLineEdit(self)
-        self.textbox2 = QLineEdit(self)
-        self.textbox3 = QLineEdit(self)
-        self.textbox4 = QLineEdit(self)
-        self.textbox5 = QLineEdit(self)
-        self.textbox6 = QLineEdit(self)
-        self.checkbox1 = QCheckBox(self)
-        self.checkbox2 = QCheckBox(self)
-        self.textbox7 = QLineEdit(self)
+        self.height = 450
+        self.textbox1 = QLineEdit(self)   # g
+        self.textbox2 = QLineEdit(self)   # m1
+        self.textbox3 = QLineEdit(self)   # m2
+        self.textbox4 = QLineEdit(self)   # L1
+        self.textbox5 = QLineEdit(self)   # L2
+        self.textbox6 = QLineEdit(self)   # time
+        self.checkbox1 = QCheckBox(self)  # lower trajectory
+        self.checkbox2 = QCheckBox(self)  # upper trajectory
+        self.textbox7 = QLineEdit(self)   # dt
+        self.textbox8 = QLineEdit(self)   # init theta1
+        self.textbox9 = QLineEdit(self)   # init theta2
+        self.l0 = QLabel(self)   # param label
         self.l1 = QLabel(self)
         self.l2 = QLabel(self)
         self.l3 = QLabel(self)
@@ -79,7 +82,10 @@ class App(QMainWindow):
         self.l7 = QLabel(self)
         self.l8 = QLabel(self)
         self.l9 = QLabel(self)
-        self.l10 = QLabel(self)
+        self.l10 = QLabel(self)  # warning
+        self.l11 = QLabel(self)  # settings label
+        self.l12 = QLabel(self)
+        self.l13 = QLabel(self)
         self.button = QPushButton('Simulate', self)
         self.initUI()
 
@@ -87,62 +93,83 @@ class App(QMainWindow):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        self.l1.move(20, 13)
+        self.l0.move(20, 5)
+        self.l0.resize(280, 20)
+        self.l0.setText("Input parameters")
+
+        self.l1.move(20, 18)
         self.l1.setText("g: ")
-        self.textbox1.move(100, 20)
+        self.textbox1.move(100, 25)
         self.textbox1.resize(280, 20)
         self.textbox1.setText("10.0")
 
-        self.l2.move(20, 43)
+        self.l2.move(20, 48)
         self.l2.setText("m1 (kg): ")
-        self.textbox2.move(100, 50)
+        self.textbox2.move(100, 55)
         self.textbox2.resize(280, 20)
         self.textbox2.setText("1")
 
-        self.l3.move(20, 73)
+        self.l3.move(20, 78)
         self.l3.setText("m2 (kg): ")
-        self.textbox3.move(100, 80)
+        self.textbox3.move(100, 85)
         self.textbox3.resize(280, 20)
         self.textbox3.setText("2")
 
-        self.l4.move(20, 103)
+        self.l4.move(20, 108)
         self.l4.setText("L1 (m): ")
-        self.textbox4.move(100, 110)
+        self.textbox4.move(100, 115)
         self.textbox4.resize(280, 20)
         self.textbox4.setText("0.5")
 
-        self.l5.move(20, 133)
+        self.l5.move(20, 138)
         self.l5.setText("L2 (m): ")
-        self.textbox5.move(100, 140)
+        self.textbox5.move(100, 145)
         self.textbox5.resize(280, 20)
         self.textbox5.setText("0.8")
 
-        self.l6.move(20, 163)
+        self.l6.move(20, 168)
         self.l6.setText("simulation \ntime (s): ")
-        self.textbox6.move(100, 170)
+        self.textbox6.move(100, 175)
         self.textbox6.resize(280, 20)
         self.textbox6.setText("10.0")
 
-        self.l7.move(20, 200)
+        self.l12.move(20, 198)
+        self.l12.setText("initial angle (°) \nof upper mass: ")
+        self.textbox8.move(100, 205)
+        self.textbox8.resize(280, 20)
+        self.textbox8.setText("-90")
+
+        self.l13.move(20, 228)
+        self.l13.setText("initial angle (°) \nof lower mass: ")
+        self.textbox9.move(100, 235)
+        self.textbox9.resize(280, 20)
+        self.textbox9.setText("-90")
+
+        self.l7.move(20, 290)
         self.l7.setText("Draw lower mass \ntrajectory")
-        self.checkbox1.move(120, 200)
+        self.checkbox1.move(120, 290)
         self.checkbox1.setChecked(True)
 
-        self.l8.move(20, 235)
+        self.l8.move(20, 323)
         self.l8.setText("Draw upper mass \ntrajectory")
-        self.checkbox2.move(120, 230)
+        self.checkbox2.move(120, 318)
         self.checkbox2.setChecked(False)
 
-        self.l9.move(20, 280)
+        self.l9.move(20, 348)
         self.l9.setText("dt (s): ")
-        self.textbox7.move(100, 285)
+        self.textbox7.move(100, 355)
         self.textbox7.resize(280, 20)
         self.textbox7.setText("0.05")
-        self.l10.move(20, 305)
+
+        self.l10.move(20, 370)
         self.l10.resize(280, 40)
         self.l10.setText("WARNING: changing the value of the time step may affect \nmodel's stability. Use carefully.")
 
-        self.button.move(20, 345)
+        self.l11.move(20, 270)
+        self.l11.resize(280, 20)
+        self.l11.setText("Simulation settings")
+
+        self.button.move(20, 410)
 
         self.button.clicked.connect(self.on_click)
         self.show()
@@ -155,7 +182,9 @@ class App(QMainWindow):
         m2 = float(self.textbox3.text())
         L1 = float(self.textbox4.text())
         L2 = float(self.textbox5.text())
-        initial = np.array([3 * np.pi / 7, 0, 3 * np.pi / 4, 0])
+        t1 = np.pi * float(self.textbox8.text()) / 180
+        t2 = np.pi * float(self.textbox9.text()) / 180
+        initial = np.array([t1, 0, t2, 0])
         parameters = [g, m1, m2, L1, L2]
         abserr = 1.0e-8
         relerr = 1.0e-6
